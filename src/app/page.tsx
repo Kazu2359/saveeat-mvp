@@ -7,6 +7,8 @@ import DeleteButton from "@/components/DeleteButton";
 import ToastFromSearch from "@/components/ToastFromSearch";
 import InventoryListClient, { type Item as ClientItem } from "@/components/InventoryListClient";
 import ExpiryNotifier from "@/components/ExpiryNotifier";
+import { deleteItem } from "./inventory/actions"; // or "@/app/inventory/actions"
+
 
 type Item = {
   id: string;
@@ -31,12 +33,7 @@ function badgeClass(days: number | null) {
 }
 
 /** 🗑️ 削除 → /?toast=deleted にリダイレクト（トースト合図） */
-export async function deleteItem(id: string) {
-  "use server";
-  const supabase = await createClient();
-  await supabase.from("pantry_items").delete().eq("id", id);
-  redirect("/?toast=deleted");
-}
+
 
 /** ⬇⬇ ここが重要：searchParams を必ず受け取る ⬇⬇ */
 export default async function Home({
@@ -168,7 +165,7 @@ if (user) {
       )}
 
       {/* ここを差し替え：クライアント側で searchParams を読みフィルタ */}
-      <InventoryListClient items={items} deleteAction={deleteItem} />
+      
 
     </div>
   );
